@@ -1,0 +1,9 @@
+# Runtime dependencies are available from PyPI. The pinned upstream MiniMax-H3 MLX
+# Python package is vendored in this custom node, so installing does not access GitHub.
+mlx>=0.32.0; sys_platform == "darwin" and platform_machine == "arm64"
+mlx-vlm>=0.6.10; sys_platform == "darwin" and platform_machine == "arm64"
+numpy>=1.26
+pillow>=10
+safetensors>=0.4
+huggingface_hub>=0.30
+transformers>=4.57

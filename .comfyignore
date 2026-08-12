@@ -1,0 +1,4 @@
+# Repository/CI metadata is not needed in the installed custom-node archive.
+.github/
+.gitignore
+PUBLISHING.md

@@ -1,0 +1,32 @@
+[project]
+name = "minimax-h3-mlx"
+version = "0.1.0"
+description = "Generate MiniMax-H3 video with stereo audio in ComfyUI using MLX on Apple Silicon Macs."
+readme = "README.md"
+license = { file = "LICENSE" }
+requires-python = ">=3.11"
+dependencies = [
+  "mlx>=0.32.0; sys_platform == 'darwin' and platform_machine == 'arm64'",
+  "mlx-vlm>=0.6.10; sys_platform == 'darwin' and platform_machine == 'arm64'",
+  "numpy>=1.26",
+  "pillow>=10",
+  "safetensors>=0.4",
+  "huggingface_hub>=0.30",
+  "transformers>=4.57",
+]
+classifiers = [
+  "Operating System :: MacOS",
+  "Environment :: GPU :: Apple Metal",
+]
+
+[project.urls]
+Repository = "https://github.com/Argus-AiTeam/ComfyUI-MiniMax-H3-MLX"
+Documentation = "https://github.com/Argus-AiTeam/ComfyUI-MiniMax-H3-MLX#readme"
+Issues = "https://github.com/Argus-AiTeam/ComfyUI-MiniMax-H3-MLX/issues"
+
+# Used by Comfy Registry: https://registry.comfy.org
+[tool.comfy]
+PublisherId = "argus-ai-team"
+DisplayName = "MiniMax H3 MLX for Mac"
+Icon = "https://raw.githubusercontent.com/Argus-AiTeam/ComfyUI-MiniMax-H3-MLX/main/assets/icon.svg"
+Banner = "https://raw.githubusercontent.com/Argus-AiTeam/ComfyUI-MiniMax-H3-MLX/main/assets/banner.svg"
