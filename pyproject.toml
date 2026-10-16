@@ -1,13 +1,14 @@
 [project]
 name = "minimax-h3-mlx"
 version = "0.1.0"
-description = "Generate MiniMax-H3 video with stereo audio in ComfyUI using MLX on Apple Silicon Macs."
+description = "Generate MiniMax-H3 video with stereo audio and MiniMax Music 3 songs in ComfyUI using MLX on Apple Silicon Macs."
 readme = "README.md"
 license = { file = "LICENSE" }
 requires-python = ">=3.11"
 dependencies = [
   "mlx>=0.32.0; sys_platform == 'darwin' and platform_machine == 'arm64'",
   "mlx-vlm>=0.6.10; sys_platform == 'darwin' and platform_machine == 'arm64'",
+  "mlx-audio>=0.5.9; sys_platform == 'darwin' and platform_machine == 'arm64'",
   "numpy>=1.26",
   "pillow>=10",
   "safetensors>=0.4",
@@ -30,3 +31,8 @@ PublisherId = "argus-ai-team"
 DisplayName = "MiniMax H3 MLX for Mac"
 Icon = "https://raw.githubusercontent.com/Argus-AiTeam/ComfyUI-MiniMax-H3-MLX/main/assets/icon.svg"
 Banner = "https://raw.githubusercontent.com/Argus-AiTeam/ComfyUI-MiniMax-H3-MLX/main/assets/banner.svg"
+
+[tool.pytest.ini_options]
+# The repository root is the ComfyUI package itself; import tests standalone.
+addopts = "--import-mode=importlib"
+testpaths = ["tests"]

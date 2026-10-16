@@ -4,6 +4,85 @@
 
 > 这不是 CUDA/PyTorch 移植。推理仍由上游 MLX 管线执行，因此只支持 Apple Silicon（M 系列）Mac。
 
+## MiniMax Music 3 (MLX)
+
+This fork adds two nodes that generate full songs with
+[MiniMax Music 3](https://huggingface.co/MiniMaxAI/MiniMax-Music3) through the
+native MLX port in [`mlx-audio`](https://github.com/Blaizzy/mlx-audio)
+(`mlx_audio.music`). ComfyUI's built-in Music3 support runs on PyTorch/MPS; these
+nodes run the whole pipeline (Qwen3 AR song writer, RVQ depth decoder,
+flow-matching DiT, vocoder) on MLX instead.
+
+- **Load MiniMax Music3 (MLX)**: pick an MLX conversion from
+  `ComfyUI/models/minimax_music3/` or an `mlx-community` preset. Missing presets
+  download into that folder when `allow_download` is on. `custom_path` accepts
+  any MLX Music3 directory.
+- **Generate MiniMax Music3 Song**: caption + lyrics in, ComfyUI `AUDIO`
+  (stereo, 44.1 kHz) out. Wire it to the core Preview Audio / Save Audio nodes.
+
+```
+Load MiniMax Music3 (MLX) -> Generate MiniMax Music3 Song -> Save Audio
+```
+
+`example_workflows/minimax_music3_mlx_text_to_song.json` contains that graph and
+shows up under ComfyUI's workflow templates for this node pack.
+
+### Weights
+
+| Preset | Notes |
+| --- | --- |
+| `mlx-community/MiniMax-Music3-mxfp8` | Default; best balance of memory and lyric fidelity |
+| `mlx-community/MiniMax-Music3-8bit` / `-6bit` / `-4bit` | Affine quants |
+| `mlx-community/MiniMax-Music3-mxfp4` | Experimental; can drop or alter lyrics |
+| `mlx-community/MiniMax-Music3-bf16` | Dense reference |
+
+Accept the [MiniMax-Music3 Community License](https://huggingface.co/MiniMaxAI/MiniMax-Music3/blob/main/LICENSE)
+first. To download ahead of time instead of from the node:
+
+```
+hf download mlx-community/MiniMax-Music3-mxfp8 \
+  --local-dir ComfyUI/models/minimax_music3/MiniMax-Music3-mxfp8
+```
+
+A model directory needs `config.json`, the `*.safetensors` weights and the
+official `tokenizer/`. The loader refuses directories without the tokenizer,
+because `mlx-audio` would otherwise fall back to its test tokenizer and
+produce noise.
+
+### Generation
+
+- `caption`: style, mood, BPM, instrumentation, vocal, arrangement.
+- `lyrics`: section tags (`[intro]`, `[verse]`, `[chorus]`, `[bridge]`, `[outro]`)
+  on their own lines. Lyrics are required; use `[instrumental]` for no vocals.
+- `duration_seconds`: upper bound, 1–360 s. The model may end the song earlier.
+- `steps`: flow-matching steps per 8 s chunk, 1–30.
+- `seed`: drives the autoregressive stage, which decides most of the song.
+  Change it to reroll the composition.
+
+### Who loads the model, and when
+
+The loader only resolves (or downloads) the weights. The model is read into
+unified memory on the first generation and then stays resident inside the
+loader's cached output, so later runs skip loading. It is freed when
+`unload_after` is on, when the loader inputs change, or when ComfyUI drops its
+node cache. ComfyUI's own model manager does not track MLX memory, so
+"Unload models" in the UI does not release it. Unified memory is shared with
+PyTorch and any H3 pipeline, so avoid keeping both models resident on smaller Macs.
+
+Progress is reported per autoregressive frame (most of the runtime) and per
+diffusion chunk, and Cancel takes effect between them.
+
+### Tests
+
+```
+pip install "mlx[cpu]" "mlx-audio>=0.5.9" pytest   # mlx (no extra) on macOS
+pytest
+```
+
+The tests run mlx-audio's randomly initialized tiny Music3 config and check the
+node's staged generation matches `Model.generate` numerically, including
+multi-chunk stitching.
+
 ## ComfyUI、节点和 Manager 的关系
 
 - **ComfyUI** 是运行工作流的宿主程序；

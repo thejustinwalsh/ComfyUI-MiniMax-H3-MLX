@@ -1,0 +1,189 @@
+{
+  "id": "0b7f3a52-4c1e-4f7e-9a8d-6d1f2a3b4c5d",
+  "revision": 0,
+  "last_node_id": 4,
+  "last_link_id": 3,
+  "nodes": [
+    {
+      "id": 1,
+      "type": "MiniMaxMusic3ModelLoader",
+      "pos": [
+        40,
+        120
+      ],
+      "size": [
+        380,
+        130
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "model",
+          "type": "MINIMAX_MUSIC3_MODEL",
+          "links": [
+            1
+          ]
+        },
+        {
+          "name": "load_info",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "MiniMaxMusic3ModelLoader"
+      },
+      "widgets_values": [
+        "mlx-community/MiniMax-Music3-mxfp8",
+        true,
+        ""
+      ]
+    },
+    {
+      "id": 2,
+      "type": "MiniMaxMusic3Generate",
+      "pos": [
+        460,
+        120
+      ],
+      "size": [
+        460,
+        520
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "model",
+          "type": "MINIMAX_MUSIC3_MODEL",
+          "link": 1
+        }
+      ],
+      "outputs": [
+        {
+          "name": "audio",
+          "type": "AUDIO",
+          "links": [
+            2,
+            3
+          ]
+        },
+        {
+          "name": "generation_info",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "MiniMaxMusic3Generate"
+      },
+      "widgets_values": [
+        "Warm acoustic pop, 96 BPM, intimate female vocal, fingerpicked guitar, soft brushed drums, gentle piano in the chorus",
+        "[verse]\nMorning light across the room\nCoffee cooling, quiet tune\n[chorus]\nSing with me, the day is new\nEvery color coming through",
+        30.0,
+        30,
+        7,
+        "fixed",
+        false
+      ]
+    },
+    {
+      "id": 3,
+      "type": "PreviewAudio",
+      "pos": [
+        960,
+        120
+      ],
+      "size": [
+        320,
+        110
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "audio",
+          "type": "AUDIO",
+          "link": 2
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "PreviewAudio"
+      },
+      "widgets_values": []
+    },
+    {
+      "id": 4,
+      "type": "SaveAudio",
+      "pos": [
+        960,
+        280
+      ],
+      "size": [
+        320,
+        130
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "audio",
+          "type": "AUDIO",
+          "link": 3
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "SaveAudio"
+      },
+      "widgets_values": [
+        "audio/minimax_music3"
+      ]
+    }
+  ],
+  "links": [
+    [
+      1,
+      1,
+      0,
+      2,
+      0,
+      "MINIMAX_MUSIC3_MODEL"
+    ],
+    [
+      2,
+      2,
+      0,
+      3,
+      0,
+      "AUDIO"
+    ],
+    [
+      3,
+      2,
+      0,
+      4,
+      0,
+      "AUDIO"
+    ]
+  ],
+  "groups": [],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 1,
+      "offset": [
+        0,
+        0
+      ]
+    }
+  },
+  "version": 0.4
+}
