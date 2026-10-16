@@ -139,15 +139,31 @@ def test_model_resolution(tmp_path, monkeypatch):
     assert music3._resolve_model("mlx-community/MiniMax-Music3-mxfp8", "", False) == local
     assert music3._resolve_model("org/custom", "", False) == nested
     assert music3._resolve_model("ignored", str(nested), False) == nested
-    # Presets already on disk are not offered twice.
+    # A downloaded preset stays under its repo id, and is listed only once.
     choices = music3._model_choices()
-    assert "mlx-community/MiniMax-Music3-mxfp8" not in choices
+    assert choices.count("mlx-community/MiniMax-Music3-mxfp8") == 1
+    assert "MiniMax-Music3-mxfp8" not in choices
+    assert "org/custom" in choices
     assert "mlx-community/MiniMax-Music3-4bit" in choices
 
     with pytest.raises(FileNotFoundError, match="hf download"):
         music3._resolve_model("mlx-community/MiniMax-Music3-4bit", "", False)
     with pytest.raises(FileNotFoundError, match="custom_path"):
         music3._resolve_model("x", str(tmp_path / "not-a-model"), False)
+
+
+def test_example_workflow_model_survives_download(tmp_path, monkeypatch):
+    """Downloading the model must not invalidate the workflow that downloaded it."""
+    monkeypatch.setattr(music3, "_music3_dir", lambda: tmp_path)
+    workflow = json.loads(
+        (ROOT / "example_workflows" / "minimax_music3_mlx_text_to_song.json").read_text()
+    )
+    loader = next(n for n in workflow["nodes"] if n["type"] == "MiniMaxMusic3ModelLoader")
+    choice = loader["widgets_values"][0]
+
+    assert choice in music3._model_choices()
+    _fake_model_dir(tmp_path / choice.split("/", 1)[-1])
+    assert choice in music3._model_choices()
 
 
 def test_loader_requires_tokenizer(tmp_path, monkeypatch):

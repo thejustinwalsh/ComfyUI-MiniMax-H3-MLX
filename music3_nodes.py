@@ -105,8 +105,11 @@ def _local_model_names() -> list[str]:
 
 
 def _model_choices() -> list[str]:
-    local = _local_model_names()
-    presets = [name for name in HF_PRESETS if _preset_dir(name).name not in local]
+    # Offer a downloaded preset under its repo id, not its directory name, so a
+    # workflow saved before the download still validates after it.
+    preset_ids = {_preset_dir(name).name: name for name in HF_PRESETS}
+    local = [preset_ids.get(name, name) for name in _local_model_names()]
+    presets = [name for name in HF_PRESETS if name not in local]
     return [*local, *presets] or list(HF_PRESETS)
 
 
