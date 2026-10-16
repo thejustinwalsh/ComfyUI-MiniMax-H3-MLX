@@ -2,6 +2,8 @@
 # Python package is vendored in this custom node, so installing does not access GitHub.
 mlx>=0.32.0; sys_platform == "darwin" and platform_machine == "arm64"
 mlx-vlm>=0.6.10; sys_platform == "darwin" and platform_machine == "arm64"
+# MiniMax Music 3 MLX port lives in mlx_audio.music (verified against 0.5.9).
+mlx-audio>=0.5.9; sys_platform == "darwin" and platform_machine == "arm64"
 numpy>=1.26
 pillow>=10
 safetensors>=0.4
