@@ -31,3 +31,8 @@ PublisherId = "argus-ai-team"
 DisplayName = "MiniMax H3 MLX for Mac"
 Icon = "https://raw.githubusercontent.com/Argus-AiTeam/ComfyUI-MiniMax-H3-MLX/main/assets/icon.svg"
 Banner = "https://raw.githubusercontent.com/Argus-AiTeam/ComfyUI-MiniMax-H3-MLX/main/assets/banner.svg"
+
+[tool.pytest.ini_options]
+# The repository root is the ComfyUI package itself; import tests standalone.
+addopts = "--import-mode=importlib"
+testpaths = ["tests"]

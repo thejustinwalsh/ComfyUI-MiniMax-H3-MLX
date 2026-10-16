@@ -2,3 +2,6 @@
 .github/
 .gitignore
 PUBLISHING.md
+
+# Tests are not needed in the installed custom-node archive.
+tests/
