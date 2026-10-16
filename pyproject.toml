@@ -1,7 +1,7 @@
 [project]
 name = "minimax-h3-mlx"
 version = "0.1.0"
-description = "Generate MiniMax-H3 video with stereo audio in ComfyUI using MLX on Apple Silicon Macs."
+description = "Generate MiniMax-H3 video with stereo audio and MiniMax Music 3 songs in ComfyUI using MLX on Apple Silicon Macs."
 readme = "README.md"
 license = { file = "LICENSE" }
 requires-python = ">=3.11"
